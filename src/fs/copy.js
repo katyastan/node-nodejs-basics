@@ -1,21 +1,32 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
-
+import { cp } from 'fs/promises'; 
 
 const copy = async () => {
-    const src = join('src/fs/files');
-    const dest = join('src/fs/files_copy');
+    
+    const existingPath = join('src/fs/files'); 
+    const destinationPath = join('src/fs/files_copy'); 
+
     try {
-        await fs.access(src);
-        await fs.access(dest);
+        await fs.access(existingPath);
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            throw new Error('FS operation failed'); 
+        }
+        throw new Error('FS operation failed');
+    }
+
+    try {
+        await fs.access(destinationPath);
+        throw new Error('FS operation failed'); 
     } catch (error) {
         if (error.code !== 'ENOENT') {
-            throw error;
+            throw new Error('FS operation failed'); 
         }
     }
-    await fs.mkdir(src, dest);
-    console.log('Copied successfully');
+
+    await cp(existingPath, destinationPath, { recursive: true });
+    console.log(`Copied successfully.`);
 };
 
 await copy();
---
