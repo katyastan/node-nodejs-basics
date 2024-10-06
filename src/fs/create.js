@@ -6,7 +6,7 @@ const create = async () => {
     const filePath = join('src/fs/files', 'fresh.txt');
         try {
             await fs.access(filePath);
-            console.error('FS operation failed');
+            console.error('error: FS operation failed');
         } catch (error) {
             if (error.code !== 'ENOENT') {
                 throw error;
