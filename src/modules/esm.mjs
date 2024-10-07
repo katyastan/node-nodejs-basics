@@ -2,16 +2,17 @@ import path from 'path';
 import { release, version } from 'os';
 import { createServer as createServerHttp } from 'http';
 import './files/c.js';
+import { createRequire } from 'module';
 
 const random = Math.random();
 
 let unknownObject;
-
+const require = createRequire(import.meta.url);
 if (random > 0.5) {
-    unknownObject = await import('./files/a.json', { with: { type: 'json' } });
+    unknownObject = require('./files/a.json', { with: { type: 'json' } });
 
 } else {
-    unknownObject = await import('./files/b.json', { with: { type: 'json' } });
+    unknownObject = require('./files/b.json', { with: { type: 'json' } });
 }
 
 console.log(`Release ${release()}`);
