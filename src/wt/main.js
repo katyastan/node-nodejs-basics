@@ -3,8 +3,7 @@ import { cpus } from 'os';
 
 const performCalculations = async () => {
   const numOfCores = cpus().length; 
-  const startNumber = 10;
-  const fbService = (n) =>
+  const fibonacciCalculations = (n) =>
     new Promise((resolve) => {
       const worker = new Worker( './src/wt/worker.js', { workerData: n });
       worker.postMessage(n);
@@ -22,8 +21,8 @@ const performCalculations = async () => {
         });
       });
     });
-  const workerResults = await Promise.all(Array.from({ length: numOfCores }, (_, i) => fbService(startNumber + i)));
-  console.log(workerResults);
+  const workers = await Promise.all(Array.from({ length: numOfCores }, (_, i) => fibonacciCalculations(10 + i)));
+  console.log(workers);
 };
 
 await performCalculations();
